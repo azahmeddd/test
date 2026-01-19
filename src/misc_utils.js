@@ -48,8 +48,15 @@ function _extractCookieValue(setCookies, name) {
   return firstPart.substring(name.length + 1);
 }
 
+function _getSpreadsheet() {
+  if (CFG && CFG.SPREADSHEET_ID) {
+    return SpreadsheetApp.openById(CFG.SPREADSHEET_ID);
+  }
+  return SpreadsheetApp.getActiveSpreadsheet();
+}
+
 function _getOrCreateSheet(name) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = _getSpreadsheet();
   let sh = ss.getSheetByName(name);
   if (!sh) sh = ss.insertSheet(name);
   return sh;
