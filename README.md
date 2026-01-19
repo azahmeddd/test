@@ -6,8 +6,8 @@ Google Apps Script project for syncing SellerLab product arrivals into Google Sh
 
 ```
 .
-├── appsscript.json
 └── src
+    ├── appsscript.json
     ├── config.js
     ├── date_utils.js
     ├── http_utils.js
@@ -29,7 +29,7 @@ Google Apps Script project for syncing SellerLab product arrivals into Google Sh
 
 ## Deployment
 
-Use clasp or the Apps Script editor to upload the contents of `src/` and `appsscript.json`.
+Use clasp or the Apps Script editor to upload the contents of `src/`.
 
 ## Connecting the script to a spreadsheet
 
@@ -39,27 +39,58 @@ This project is intended to run as a **bound** Apps Script attached to the Googl
 
 1. Open the target Google Sheet.
 2. Go to **Extensions → Apps Script** (this opens a bound Apps Script project).
-3. Replace the contents of the editor files with the files from `src/` in this repo (and keep `appsscript.json` in the project).
+3. Replace the contents of the editor files with the files from `src/` in this repo (including `appsscript.json`).
 4. Save, then refresh the spreadsheet tab.
 5. The custom menu from `src/ui.js` should appear. If it does not, re-open the spreadsheet or run any top-level function once to authorize.
 
 ### Option B: clasp (recommended for keeping local files in sync)
 
-1. Install clasp and log in:
+#### 0) Prerequisites (one-time)
+
+1. Install Node.js (LTS).
+2. Install clasp and log in:
    ```bash
    npm install -g @google/clasp
    clasp login
    ```
-2. Create a **bound** script for the target spreadsheet:
+3. Enable the Apps Script API in your Google account / project settings (required for clasp to work).
+
+#### 1) Prepare your repo layout (important)
+
+`clasp` expects the manifest to live inside the sync root. This repo already uses `src/` as the source folder, so ensure `appsscript.json` lives in `src/` (as shown above).
+
+#### 2) Create a bound Apps Script project attached to your Sheet
+
+From the repo root, create a **bound** script for the target spreadsheet:
    ```bash
-   clasp create --title "SellerLab Arrivals" --type sheets --parentId <SPREADSHEET_ID>
+   clasp create --title "SellerLab Arrivals" --type sheets --parentId 1mVEKmOBFgW14eDmCLabp-OmcNrgtEjchUADaMGqw_UA
    ```
    - This creates `.clasp.json` that points at the bound script for that specific Sheet.
-3. Push the repo code:
+
+#### 3) Point clasp to `src/` (rootDir)
+
+Edit the generated `.clasp.json` (in the repo root) to include `rootDir`:
+
+```json
+{
+  "scriptId": "YOUR_SCRIPT_ID",
+  "rootDir": "src"
+}
+```
+
+#### 4) Push your code to Apps Script
+
+Push the repo code:
    ```bash
    clasp push
    ```
-4. Refresh the spreadsheet. The custom menu from `src/ui.js` should now be available.
+
+Open the bound script to verify:
+   ```bash
+   clasp open
+   ```
+
+Refresh the spreadsheet. The custom menu from `src/ui.js` should now be available.
 
 ## Scheduling automatic runs (Apps Script triggers)
 

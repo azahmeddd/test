@@ -10,6 +10,9 @@ const CFG = {
   OUT_SHEET: 'arrivals_links',
   LOG_SHEET: 'arrivals_log',
 
+  // SPREADSHEET
+  SPREADSHEET_ID: '1mVEKmOBFgW14eDmCLabp-OmcNrgtEjchUADaMGqw_UA',
+
   // LOGIN
   PHONE: '77078808084',
   PASSWORD: 'Q123456789',
